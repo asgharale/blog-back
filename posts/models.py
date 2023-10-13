@@ -1,13 +1,12 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from sort.models import Category, Tag
 
 
 
 
 class Post(models.Model):
-    STATUSES = [('pub', 'publish'), ('drf', 'draft')]
-
     title = models.CharField(max_length=255, unique=True)
     link = models.SlugField(max_length=255, unique=True)
     description = models.TextField(max_length=350)
@@ -17,13 +16,21 @@ class Post(models.Model):
     # REACH TEXT EDITOR
     body = models.TextField()
 
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    tags =models.ManyToManyField(Tag)
+
     create_date = models.DateTimeField(auto_now_add=True)
-    pub_date = models.DateTimeField(default=timezone.now)
+    update = models.DateTimeField(default=timezone.now)
     read_time = models.PositiveSmallIntegerField()
-    status = models.CharField(max_length=3, choices=STATUSES, default='pub')
+    publish = models.BooleanField(default=True)
     views = models.PositiveIntegerField(editable=False, default=3)
+    likes = models.PositiveIntegerField(default=0)
 
     author = models.ForeignKey(User, default='admin', on_delete=models.SET_DEFAULT)
 
     def __str__(self):
-        return self.link
+        return f"{self.link} -- {self.title}"
+    
+
+    class Meta:
+        ordering = ["-create_date", "-update"]
