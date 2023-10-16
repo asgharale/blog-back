@@ -7,7 +7,7 @@ from django.http import Http404
 
 class PostList(APIView):
     def get(self, request, fromat=None):
-        posts = Post.objects.all().filter(publish=True)
+        posts = Post.objects.filter(publish=True)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 
@@ -29,4 +29,32 @@ class PostDetail(APIView):
 
 
         serializer = PostSerializer(post)
+        return Response(serializer.data)
+
+
+class CatView(APIView):
+    def get_objs(self, cat):
+        try:
+            return Post.objects.filter(category__link=cat, publish=True)
+        except Post.DoesNotExist:
+            raise Http404
+        
+        
+    def get(self, request, cat, fromat=None):
+        posts = self.get_objs(cat)
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
+
+
+class TagView(APIView):
+    def get_objs(self, tag):
+        try:
+            return Post.objects.filter(tags__link=tag, publish=True)
+        except Post.DoesNotExist:
+            raise Http404
+        
+        
+    def get(self, request, tag, fromat=None):
+        posts = self.get_objs(tag)
+        serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)

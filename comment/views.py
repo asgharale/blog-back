@@ -6,13 +6,13 @@ from django.http import Http404
 
 
 class PostCommentList(APIView):
-    def get_objs(self, pk):
+    def get_objs(self, link):
         try:
-            return Comment.objects.all().filter(post=pk, confirm=True)
+            return Comment.objects.filter(post__link=link, confirm=True)
         except Comment.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, fromat=None):
-        comments = self.get_objs(pk)
+    def get(self, request, link, fromat=None):
+        comments = self.get_objs(link)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)

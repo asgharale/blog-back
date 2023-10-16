@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'posts',
     'sort',
     'comment',
+    'medstore',
 ]
 
 MIDDLEWARE = [
