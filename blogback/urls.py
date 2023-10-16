@@ -6,5 +6,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('siteapi/posts/', include('posts.urls')),
+    path('siteapi/comment/', include('comment.urls')),
+    # path('siteapi/sort/', include('sort.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

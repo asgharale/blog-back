@@ -16,8 +16,8 @@ class Post(models.Model):
     # REACH TEXT EDITOR
     body = models.TextField()
 
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-    tags =models.ManyToManyField(Tag)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='posts')
+    tags =models.ManyToManyField(Tag, related_name='posts')
 
     create_date = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(default=timezone.now)
@@ -26,7 +26,10 @@ class Post(models.Model):
     views = models.PositiveIntegerField(editable=False, default=3)
     likes = models.PositiveIntegerField(default=0)
 
-    author = models.ForeignKey(User, default='admin', on_delete=models.SET_DEFAULT)
+    author = models.ForeignKey(User, default='admin', on_delete=models.SET_DEFAULT, related_name='posts')
+
+    def coms(self):
+        return self.comments.count()
 
     def __str__(self):
         return f"{self.link} -- {self.title}"
@@ -34,3 +37,5 @@ class Post(models.Model):
 
     class Meta:
         ordering = ["-create_date", "-update"]
+    
+    # comments
