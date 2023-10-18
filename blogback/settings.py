@@ -16,6 +16,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080',
+    'http://127.0.0.1:8080',
+]
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 
@@ -28,13 +33,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'posts',
-    'sort',
-    'comment',
-    'medstore',
+    'corsheaders',
+    'posts.apps.PostsConfig',
+    'user.apps.UserConfig',
+    'sort.apps.SortConfig',
+    'comment.apps.CommentConfig',
+    'medstore.apps.MedstoreConfig',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
