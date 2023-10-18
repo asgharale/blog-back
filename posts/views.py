@@ -32,6 +32,13 @@ class PostDetail(APIView):
         return Response(serializer.data)
 
 
+
+
+class PostLikeView(APIView):
+    pass
+
+
+
 class CatView(APIView):
     def get_objs(self, cat):
         try:
