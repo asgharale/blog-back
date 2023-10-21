@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+from user.models import MyUser
 from sort.models import Category, Tag
 
 
@@ -26,7 +26,7 @@ class Post(models.Model):
     views = models.PositiveIntegerField(editable=False, default=3)
     likes = models.PositiveIntegerField(default=0)
 
-    author = models.ForeignKey(User, default='admin', on_delete=models.SET_DEFAULT, related_name='posts')
+    author = models.ForeignKey(MyUser, default='admin', on_delete=models.SET_DEFAULT, related_name='posts')
 
     def coms(self):
         return self.comments.count()

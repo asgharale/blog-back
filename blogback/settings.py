@@ -34,8 +34,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
-    'posts.apps.PostsConfig',
     'user.apps.UserConfig',
+    'posts.apps.PostsConfig',
     'sort.apps.SortConfig',
     'comment.apps.CommentConfig',
     'medstore.apps.MedstoreConfig',
@@ -129,3 +129,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+AUTH_USER_MODEL = 'user.MyUser'
