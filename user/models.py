@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 # from posts.models import Post
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class User(AbstractUser):
@@ -35,3 +37,9 @@ class Profile(models.Model):
     
     class Meta:
         ordering = ('id',)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instanse, created, **kwargs):
+    if created and instanse.is_staff and instanse.is_active:
+        Profile.objects.create(user=instanse)
