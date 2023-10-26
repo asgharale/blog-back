@@ -1,10 +1,10 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from django.utils import timezone
-from user.models import User
 from sort.models import Category, Tag
 
 
-
+User = get_user_model()
 
 class Post(models.Model):
     title = models.CharField(max_length=255, unique=True)
@@ -24,12 +24,17 @@ class Post(models.Model):
     read_time = models.PositiveSmallIntegerField()
     publish = models.BooleanField(default=True)
     views = models.PositiveIntegerField(editable=False, default=3)
-    likes = models.PositiveIntegerField(default=0)
+    liked_users = models.ManyToManyField(User, blank=True, related_name="likes")
 
     author = models.ForeignKey(User, default='admin', on_delete=models.SET_DEFAULT, related_name='posts')
 
+    @property
     def coms(self):
         return self.comments.count()
+
+    @property
+    def likes(self):
+        return self.liked_users.count()
 
     def __str__(self):
         return f"{self.link} -- {self.title}"
@@ -37,5 +42,3 @@ class Post(models.Model):
 
     class Meta:
         ordering = ["-create_date", "-update"]
-    
-    # comments

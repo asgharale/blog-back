@@ -1,13 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-# from posts.models import Post
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
 class User(AbstractUser):
     email = models.EmailField(unique=True, verbose_name="Email Address", max_length=150)
-    # likes = models.ManyToManyField(Post, blank=True, null=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username", "first_name", "last_name"]

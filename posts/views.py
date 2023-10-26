@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from posts.serializers import PostSerializer
 from posts.models import Post
 from django.http import Http404
+from rest_framework.permissions import IsAuthenticated
 
 
 class PostList(APIView):
@@ -33,8 +34,19 @@ class PostDetail(APIView):
 
 
 
+class PostsSearchView(APIView):
+    def post(self, request, fromat=None):
+        data = request.data["s"]
+        posts = Post.objects.filter(title__contains=data)
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
+
+
+
 
 class PostLikeView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     pass
 
 
