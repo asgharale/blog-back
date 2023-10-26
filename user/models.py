@@ -13,6 +13,10 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ["username", "first_name", "last_name"]
 
 
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created and instance.is_staff and instance.is_active:
+        Profile.objects.create(user=instance)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -37,9 +41,3 @@ class Profile(models.Model):
     
     class Meta:
         ordering = ('id',)
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instanse, created, **kwargs):
-    if created and instanse.is_staff and instanse.is_active:
-        Profile.objects.create(user=instanse)
