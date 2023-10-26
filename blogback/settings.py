@@ -32,8 +32,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+
+    # 3rd party apps
     'rest_framework',
     'corsheaders',
+
+    # project apps
     'user.apps.UserConfig',
     'posts.apps.PostsConfig',
     'sort.apps.SortConfig',
@@ -42,7 +46,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', #3rd party middleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -132,4 +136,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-AUTH_USER_MODEL = 'user.MyUser'
+AUTH_USER_MODEL = 'user.User'
