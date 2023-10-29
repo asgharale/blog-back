@@ -20,6 +20,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     # Personal Detail (for staff users)
+    picture = models.ImageField(upload_to="users/%Y", default="users/اصغر.jpg")
     bio = models.TextField(blank=True, verbose_name='biography')
     # PHONE_NUMBER
     # phone_num
@@ -35,7 +36,7 @@ class Profile(models.Model):
 
 
     def __str__(self):
-        return self.user
+        return self.user.username
     
     class Meta:
         ordering = ('id',)

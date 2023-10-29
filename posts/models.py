@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from sort.models import Category, Tag
+from ckeditor.fields import RichTextField
+
 
 
 User = get_user_model()
@@ -13,11 +15,11 @@ class Post(models.Model):
     meta_des = models.CharField(max_length=150, blank=True)
     thumbnail = models.ImageField(upload_to='thumbs/%Y-%m')
 
-    # REACH TEXT EDITOR
-    body = models.TextField()
+    # CKEDITOR FIELD
+    body = RichTextField()
 
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='posts')
-    tags =models.ManyToManyField(Tag, related_name='posts')
+    tags =models.ManyToManyField(Tag, related_name='posts', null=True, blank=True)
 
     create_date = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(default=timezone.now)

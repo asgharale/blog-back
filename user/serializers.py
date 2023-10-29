@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ValidationError
+from .models import Profile
 
 UserModel = get_user_model()
 
@@ -15,7 +16,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             password=clean_data['password'],
             username=clean_data['username']
         )
-        # user_obj.username = clean_data['username']
         user_obj.save()
 
         return user_obj
@@ -41,3 +41,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ('email', 'username')
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = '__all__'

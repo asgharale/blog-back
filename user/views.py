@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from user.serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
 from rest_framework import permissions, status
+from .models import User, Profile
+from django.http import Http404
 
 
 class UserRegister(APIView):
@@ -36,6 +38,25 @@ class UserLogin(APIView):
             user = serializer.chek_user(data)
             login(request, user)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+class UserProfile(APIView):
+    def get_obj(self, username):
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise Http404
+
+        try:
+            prof = Profile.objects.get(user=user)
+        except Profile.DoesNotExist:
+            raise Http404
+
+        # return how to combine to model instance in django
+
+    def get(self, request, username, fromat=None):
+        user = self.get_obj(username)
         
 
 
@@ -46,3 +67,8 @@ class UserLogout(APIView):
     def get(self, request):
         logout(request)
         return Response(status=status.HTTP_200_OK)
+
+
+
+class UsersView(APIView):
+    pass
