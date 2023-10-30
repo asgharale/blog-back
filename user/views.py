@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model, login, logout
+from django.contrib.auth import get_user_model, login, logout, authenticate
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,20 +6,33 @@ from user.serializers import UserRegisterSerializer, UserLoginSerializer, UserSe
 from rest_framework import permissions, status
 from .models import User, Profile
 from django.http import Http404
+from .models import User
+from .validations import email_validate
 
 
 class UserRegister(APIView):
     permission_classes = (permissions.AllowAny,)
 
+    def create(self, clean_data):
+        user = User.objects.create(
+            email=clean_data['email'],
+            username=clean_data['username'],
+            password=clean_data['password'])
+        user.first_name = clean_data['first_name']
+        user.last_name = clean_data['last_name']
+        
+        return user
+
+
+
     def post(self, request):
-        # VALIDATION REQUIRED
-        # clean_data = MyValidation(request.data)
         clean_data = request.data
-        serializer = UserRegisterSerializer(data=clean_data)
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.create(clean_data)
-            if user:
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if email_validate(clean_data['email']):
+            serializer = UserRegisterSerializer(data=clean_data)
+            if serializer.is_valid(raise_exception=True):
+                user = self.create(clean_data)
+                if user:
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Reaponse(status=status.HTTP_400_BAD_REQUEST)
 
 

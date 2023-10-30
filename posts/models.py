@@ -19,7 +19,7 @@ class Post(models.Model):
     body = RichTextField()
 
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='posts')
-    tags =models.ManyToManyField(Tag, related_name='posts', null=True, blank=True)
+    tags =models.ManyToManyField(Tag, related_name='posts', blank=True)
 
     create_date = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(default=timezone.now)
