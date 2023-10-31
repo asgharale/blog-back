@@ -1,17 +1,17 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from posts.serializers import PostSerializer, PostListSerializer
 from posts.models import Post
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 
 
-class PostList(APIView):
-    def get(self, request, fromat=None):
-        posts = Post.objects.filter(publish=True)
-        serializer = PostListSerializer(posts, many=True)
-        return Response(serializer.data)
+class PostList(ListAPIView):
+    queryset = Post.objects.filter(publish=True)
+    serializer_class = PostListSerializer
 
 
 

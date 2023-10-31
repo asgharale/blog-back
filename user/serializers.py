@@ -19,17 +19,12 @@ class UserLoginSerializer(serializers.Serializer):
 
     def chek_user(self, clean_data):
         user = authenticate(
-            username = clean_data['username'],
+            username = clean_data['email'],
             password = clean_data['password']
         )
         if not user:
             raise ValidationError('user not found.')
         return user
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserModel
-        fields = ('email', 'username')
 
 
 class ProfileSerializer(serializers.ModelSerializer):

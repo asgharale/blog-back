@@ -2,12 +2,12 @@ from django.contrib.auth import get_user_model, login, logout, authenticate
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from user.serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
+from user.serializers import UserRegisterSerializer, UserLoginSerializer
 from rest_framework import permissions, status
 from .models import User, Profile
 from django.http import Http404
 from .models import User
-from .validations import email_validate
+from .validations import email_validation, user_validation
 
 
 class UserRegister(APIView):
@@ -24,10 +24,9 @@ class UserRegister(APIView):
         return user
 
 
-
     def post(self, request):
         clean_data = request.data
-        if email_validate(clean_data['email']):
+        if email_validation(clean_data['email']):
             serializer = UserRegisterSerializer(data=clean_data)
             if serializer.is_valid(raise_exception=True):
                 user = self.create(clean_data)
@@ -40,15 +39,16 @@ class UserLogin(APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = (SessionAuthentication,)
 
+
     def post(self, request):
-        data = request.data
+        clean_data = request.data
 
-        # assert validate_email(data.email)
-        # assert validate_pass(data.password)
+        assert email_validation(clean_data['email'])
+        # assert validate_pass(data['password'])
 
-        serializer = UserLoginSerializer(data=data)
+        serializer = UserLoginSerializer(data=clean_data)
         if serializer.is_valid(raise_exception=True):
-            user = serializer.chek_user(data)
+            user = user_validation(clean_data)
             login(request, user)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -80,8 +80,3 @@ class UserLogout(APIView):
     def get(self, request):
         logout(request)
         return Response(status=status.HTTP_200_OK)
-
-
-
-class UsersView(APIView):
-    pass
