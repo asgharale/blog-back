@@ -7,5 +7,5 @@ urlpatterns = [
     path('v1/post/<int:pk>/l', PostLikeView.as_view()),
     path('v1/cpost/<slug:cat>', CatView.as_view()),
     path('v1/tpost/<slug:tag>', TagView.as_view()),
-    path('v1/posts/search', PostsSearchView.as_view())
+    path('v1/posts/search/<str:s>', PostsSearchView.as_view())
 ]

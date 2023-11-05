@@ -34,12 +34,11 @@ class PostDetail(APIView):
 
 
 
-class PostsSearchView(APIView):
-    def post(self, request, fromat=None):
-        data = request.data["s"]
-        posts = Post.objects.filter(title__contains=data)
-        serializer = PostListSerializer(posts, many=True)
-        return Response(serializer.data)
+class PostsSearchView(ListAPIView):
+    serializer_class = PostListSerializer
+    def get_queryset(self):
+        queryset = Post.objects.filter(title__contains=self.kwargs['s'], publish=True)
+        return queryset
 
 
 
@@ -63,27 +62,20 @@ class PostLikeView(APIView):
 
 
 
-class CatView(APIView):
-    def get_objs(self, cat):
+class CatView(ListAPIView):
+    serializer_class = PostListSerializer
+    def get_queryset(self):
         try:
-            return Post.objects.filter(category__link=cat, publish=True)
+            return Post.objects.filter(publish=True, category__link=self.kwargs['cat'])
         except Post.DoesNotExist:
             raise Http404
 
-    def get(self, request, cat, fromat=None):
-        posts = self.get_objs(cat)
-        serializer = PostListSerializer(posts, many=True)
-        return Response(serializer.data)
 
-
-class TagView(APIView):
-    def get_objs(self, tag):
+class TagView(ListAPIView):
+    serializer_class = PostListSerializer
+    def get_queryset(self):
         try:
-            return Post.objects.filter(tags__link=tag, publish=True)
+            return Post.objects.filter(publish=True, tags__link=self.kwargs['tag'])
         except Post.DoesNotExist:
             raise Http404
-
-    def get(self, request, tag, fromat=None):
-        posts = self.get_objs(tag)
-        serializer = PostListSerializer(posts, many=True)
-        return Response(serializer.data)
+            
