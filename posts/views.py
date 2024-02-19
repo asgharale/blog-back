@@ -9,6 +9,7 @@ from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 
 
+
 class PostList(ListAPIView):
     queryset = Post.objects.filter(publish=True)
     serializer_class = PostListSerializer
@@ -29,8 +30,8 @@ class PostDetail(APIView):
         post.views += 1
         post.save()
 
-        serializer = PostSerializer(post)
-        return Response(serializer.data)
+        serializer = PostSerializer(post, context= {"request": request})
+        return Response(data=serializer.data)
 
 
 

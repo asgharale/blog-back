@@ -38,6 +38,14 @@ class Post(models.Model):
     def likes(self):
         return self.liked_users.count()
 
+    # @property
+    # def cat(self):
+    #     return self.category
+
+    # @property
+    # def tags_obj(self):
+    #     return self.tags
+
     def __str__(self):
         return f"{self.link} -- {self.title}"
     
